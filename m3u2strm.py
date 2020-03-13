@@ -1,3 +1,4 @@
+# This Python file uses the following encoding: utf-8
 '''
 This is a python script to parse an m3u file that has a list of VOD media, and create a folder structure like follows:
 
@@ -28,7 +29,12 @@ import os
 m3ufile = "liveTV.2020.03.12 (1).m3u"
 #root directory should be created already, it is where the group folders will be located. relative to the working directory.
 rootdirectory = "strms"
-
+#create the strms directory if it does not exist:
+if not os.path.exists(rootdirectory):
+  os.mkdir(rootdirectory)
+    print('Created Streams Directory:', rootdirectory)
+  else:
+    print('Streams Directory Found', moviedirectory)
 m3ulist = open(m3ufile,"r")
 streamlist = m3ulist.read()
 #parse the file into an array of streams
