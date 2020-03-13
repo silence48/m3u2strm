@@ -71,7 +71,6 @@ for media in mediadictionary:
 '''
 for i in range(len(mediadictionary)):
   md = mediadictionary[i]
- 
   print(md)
   groupdirectory = '/'.join((rootdirectory,md[3]))
   resolution = ""
@@ -109,7 +108,6 @@ for i in range(len(mediadictionary)):
     showdirectory = ""
     title = ""
     date = ""
-
     if list(md[2])[0] == "S" and list(md[2])[3] == "E":
       showdirectory = '/'.join((groupdirectory,md[0]))
       showwithepisode = (md[0] + " (" + md[2] + ")")
@@ -122,7 +120,10 @@ for i in range(len(mediadictionary)):
       titlestring = md[0].split(" ")
       title = ""
       date = ""
+      vset = False
       for i in range(len(titlestring)):
+        if vset == True:
+          break
         try:
           int(titlestring[i])
         except:
@@ -142,13 +143,16 @@ for i in range(len(mediadictionary)):
               title = " ".join(titlestring[:i])
               showdirectory = '/'.join((groupdirectory,title))
               filename = showdirectory + "/" + ("-".join((title,date))) + " - " + resolution + ".strm"
+              vset = True
             elif 0 < int(titlestring[i]):
               title = " ".join(titlestring[:i])
               showdirectory = '/'.join((groupdirectory,title))
               filename = showdirectory + "/" + (" - ".join((md[0], resolution))) + ".strm"
+              vset = True
             else:
               showdirectory = '/'.join((groupdirectory,md[0]))
               filename = showdirectory + "/" + (" - -".join((md[0], resolution))) + ".strm"
+              vset = True
     if not os.path.exists(showdirectory):
       os.mkdir(showdirectory)
       print('Created show Directory:', showdirectory)
@@ -162,4 +166,3 @@ for i in range(len(mediadictionary)):
       streamfile.close()
     else:
       print("stream file already found")
-print("strm files and directory structure created")
