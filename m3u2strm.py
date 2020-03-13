@@ -25,7 +25,7 @@ the working directory which the python script is executed in ...
 
 import os
 #this should be the name of your m3u and in the same directory as this python file.
-m3ufile = "m3u filename.m3u"
+m3ufile = "liveTV.2020.03.12 (1).m3u"
 #root directory should be created already, it is where the group folders will be located. relative to the working directory.
 rootdirectory = "strms"
 
@@ -39,6 +39,7 @@ mediadictionary = {}
 print("streams length", len(streams))
 #iterate over all the streams and parse the information for each content into a list, then put that list into the dictionary
 for i in range(len(streams)):
+#for i in range(50):
   stream = []
   lines = streams[i].split("\n")
   if i+1 != len(streams):
@@ -102,9 +103,29 @@ for i in range(len(mediadictionary)):
     else:
       print("stream file already found")
   else:
-    showdirectory = '/'.join((groupdirectory,md[0]))
-    showwithepisode = (md[0] + " (" + md[2] + ")")
-    filename = showdirectory + "/" + (" - ".join((showwithepisode, resolution))) + ".strm"
+    showdirectory = ""
+    title = ""
+    date = ""
+
+    if list(md[2])[0] == "S":
+      showdirectory = '/'.join((groupdirectory,md[0]))
+      showwithepisode = (md[0] + " (" + md[2] + ")")
+      filename = showdirectory + "/" + (" - ".join((showwithepisode, resolution))) + ".strm"
+    else:
+      titlestring = md[0].split(" ")
+      title = ""
+      date = ""
+      for i in range(len(titlestring)):
+        try:
+          int(titlestring[i])
+        except:
+          continue
+        else:
+          if 1900 < int(titlestring[i]) < 2025 and 0 < int(titlestring[i+1]) <= 12 and 0 < int(titlestring[i+2]) <= 31:
+            date = "-".join((titlestring[i], titlestring[i+1], titlestring[i+2]))
+            title = " ".join(titlestring[:i])
+            showdirectory = '/'.join((groupdirectory,title))
+            filename = showdirectory + "/" + ("-".join((title,date))) + " - " + resolution + ".strm"
     if not os.path.exists(showdirectory):
       os.mkdir(showdirectory)
       print('Created show Directory:', showdirectory)
