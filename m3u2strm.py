@@ -81,6 +81,8 @@ for i in range(len(mediadictionary)):
     resolution = "480p"
   else:
     resolution = md[1]
+  if md[2] == "":
+    md[2] = "null"
   if not os.path.exists(groupdirectory):
     os.mkdir(groupdirectory)
     print('Created Group Directory:', groupdirectory)
@@ -160,3 +162,4 @@ for i in range(len(mediadictionary)):
       streamfile.close()
     else:
       print("stream file already found")
+print("strm files and directory structure created")
