@@ -32,9 +32,9 @@ rootdirectory = "strms"
 #create the strms directory if it does not exist:
 if not os.path.exists(rootdirectory):
   os.mkdir(rootdirectory)
-    print('Created Streams Directory:', rootdirectory)
-  else:
-    print('Streams Directory Found', rootdirectory)
+  print('Created Streams Directory:', rootdirectory)
+else:
+  print('Streams Directory Found', rootdirectory)
 m3ulist = open(m3ufile,"r")
 streamlist = m3ulist.read()
 #parse the file into an array of streams
