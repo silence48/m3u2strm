@@ -71,6 +71,7 @@ for media in mediadictionary:
 '''
 for i in range(len(mediadictionary)):
   md = mediadictionary[i]
+ 
   print(md)
   groupdirectory = '/'.join((rootdirectory,md[3]))
   resolution = ""
@@ -107,7 +108,11 @@ for i in range(len(mediadictionary)):
     title = ""
     date = ""
 
-    if list(md[2])[0] == "S":
+    if list(md[2])[0] == "S" and list(md[2])[3] == "E":
+      showdirectory = '/'.join((groupdirectory,md[0]))
+      showwithepisode = (md[0] + " (" + md[2] + ")")
+      filename = showdirectory + "/" + (" - ".join((showwithepisode, resolution))) + ".strm"
+    elif list(md[2])[0] == "S":
       showdirectory = '/'.join((groupdirectory,md[0]))
       showwithepisode = (md[0] + " (" + md[2] + ")")
       filename = showdirectory + "/" + (" - ".join((showwithepisode, resolution))) + ".strm"
@@ -119,13 +124,29 @@ for i in range(len(mediadictionary)):
         try:
           int(titlestring[i])
         except:
+          if i+1 == len(titlestring):
+            showdirectory = '/'.join((groupdirectory,md[0]))
+            filename = showdirectory + "/" + (" - -".join((md[0], resolution))) + ".strm"
           continue
         else:
-          if 1900 < int(titlestring[i]) < 2025 and 0 < int(titlestring[i+1]) <= 12 and 0 < int(titlestring[i+2]) <= 31:
-            date = "-".join((titlestring[i], titlestring[i+1], titlestring[i+2]))
-            title = " ".join(titlestring[:i])
-            showdirectory = '/'.join((groupdirectory,title))
-            filename = showdirectory + "/" + ("-".join((title,date))) + " - " + resolution + ".strm"
+          try:
+            int(titlestring[i+1])
+          except:
+            showdirectory = '/'.join((groupdirectory,md[0]))
+            filename = showdirectory + "/" + (" - -".join((md[0], resolution))) + ".strm"
+          else:
+            if 1900 < int(titlestring[i]) < 2025 and 0 < int(titlestring[i+1]) <= 12 and 0 < int(titlestring[i+2]) <= 31:
+              date = "-".join((titlestring[i], titlestring[i+1], titlestring[i+2]))
+              title = " ".join(titlestring[:i])
+              showdirectory = '/'.join((groupdirectory,title))
+              filename = showdirectory + "/" + ("-".join((title,date))) + " - " + resolution + ".strm"
+            elif 0 < int(titlestring[i]):
+              title = " ".join(titlestring[:i])
+              showdirectory = '/'.join((groupdirectory,title))
+              filename = showdirectory + "/" + (" - ".join((md[0], resolution))) + ".strm"
+            else:
+              showdirectory = '/'.join((groupdirectory,md[0]))
+              filename = showdirectory + "/" + (" - -".join((md[0], resolution))) + ".strm"
     if not os.path.exists(showdirectory):
       os.mkdir(showdirectory)
       print('Created show Directory:', showdirectory)
