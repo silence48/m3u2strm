@@ -134,9 +134,9 @@ for i in range(len(mediadictionary)):
     showdirectory = typedirectory + "/" + seriesname
     if md[5] != "":
       episodename = md[5]
-      filename = showdirectory + "/" + " - ".join((seriesname, seriesandepisode, episodename)) + "[" + language + "]" + ".strm"
+      filename = showdirectory + "/" + " - ".join((seriesname, seriesandepisode, episodename)) + " - [" + language + "]" + ".strm"
     else:
-      filename = showdirectory + "/" + " - ".join((seriesname, seriesandepisode)) + "[" + language + "]" + ".strm"
+      filename = showdirectory + "/" + " - ".join((seriesname, seriesandepisode)) + " - [" + language + "]" + ".strm"
     if not os.path.exists(showdirectory):
       os.mkdir(showdirectory)
       print('Show Movie Directory:', showdirectory)
