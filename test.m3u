@@ -1,0 +1,61 @@
+#EXTM3U
+#EXTINF:0 group-title="Movie VOD",HD : Jurassic Thunder 2020
+#EXTGRP:Movie VOD
+http://server.tv/M/b8acdd02189ac802451dac8565335a1f/blah/blaz
+#EXTINF:0 group-title="TV VOD",HD : Transplant S01E03
+#EXTGRP:TV VOD
+http://server.tv/vod/c1ae9a2db079b77820c11771922de481vkag/blah
+#EXTINF:0 group-title="TV VOD",HD : Jimmy Kimmel 2020 03 11 David Spade 720p WEB x264-XLF
+#EXTGRP:TV VOD
+http://server.tv/vod/11c2a2af17d38e5b15dadadd15de61c5vkag/blah
+#EXTINF:0 group-title="TV VOD",HD : Jimmy Fallon 2020 03 11 Sen Bernie Sanders 720p WEB x264-XLF
+#EXTGRP:TV VOD
+http://server.tv/vod/9bd22770788b74b33d084ad0aff06fd9vkag/blah
+#EXTINF:-1, HD : Stephen Colbert 2020 03 12 Dr Sanjay Gupta 720p WEB x264-XLF
+http://server.covod/f3e7ac0c6f7b45ffa5c714ccb61ca33b?u=us&s=vwe
+#EXTINF:-1, SD : The Daily Show 2020 03 12 WEB x264-XLF
+http://server.covod/f3e7ac0c6f7b45ffa5c714ccb61ca33b?u=us&s=vwe
+#EXTINF:-1, HD : Roswell New Mexico S02E02
+http://server.covod/f3e7ac0c6f7b45ffa5c714ccb61ca33b?u=us&s=vwe
+#EXTINF:-1, SD : The Voice S18E06
+http://server.covod/3a93065b0842afa0de50191dde8869e4?u=us&s=vwe
+#EXTINF:-1, HD : Ella Bella Bingo 2020
+http://movies.com/M/59a86d4a85ce201310ce773e7426c1b5?u=4ew&s=vwe
+#EXTINF:-1, HD : Cabal 2020
+http://movies.com/M/89391931fdcfac80cfbf342fb65d8b3a?u=4ew&s=vwe
+#EXTINF:-1, HD : The Gentlemen 2020
+http://movies.com/M/f4808b398794eeaf3062b1da2e4d24ae?u=4ew&s=vwe
+#EXTINF:-1,|FR| Blindspot S01 |FR| Blindspot 01x12 - Super soldat
+http://serverIPTV.co...ssword/9975.mkv
+#EXTINF:-1,|FR| Burger Quiz S01 |FR| Burger Quiz 01x05
+http://serverIPTV.co...word/751209.mkv
+#EXTINF:-1,|FR| Le plan B
+http://serverIPTV.co...word/755418.mkv
+#EXTINF:-1 tvg-name="US: STADIUM 1 | HD" tvg-id="stadium1.us" group-title="USA SPORTS",US: STADIUM 1 | HD
+http://The.link
+#EXTINF:-1 tvg-name="US: BeIN Sports 6" tvg-id="beinsports6.us" group-title="USA SPORTS",US: BeIN Sports 6
+http://The.link
+#EXTINF:-1 tvg-name="US: Sportsnet Southwest (Alternate) | HD" tvg-id="atandtsportsnetsouthwest.us" group-title="USA SPORTS",US: Sportsnet Southwest (Alternate) | HD
+http://The.link
+#EXTINF:-1 tvg-id="ABC7WXYZ.us" tvg-name="ABC 7 Detroit US" tvg-logo="http://static.iptv-epg.com/us/ABC7WXYZ.us.png" tvg-chno="1" channel-id="1" group-title="USA LOCALS - 1",US: ABC 7 (Detroit) | HD
+http://The.link
+#EXTINF:-1 tvg-id="Fox36WUPW.us" tvg-name="Fox 36 Toledo US" tvg-logo="http://static.iptv-epg.com/us/Fox36WUPW.us.png" tvg-chno="4" channel-id="4" group-title="USA LOCALS - 1",US: FOX 33 (Toledo) | HD
+http://The.link
+#EXTINF:-1 tvg-id="NBCWNBC.us" tvg-name="NBC NY US" tvg-logo="http://static.iptv-epg.com/us/NBCWNBC.us.png" tvg-chno="7" channel-id="7" group-title="USA LOCALS - 1",US: NBC 24 (Toledo) | HD
+http://The.link
+#EXTINF:-1 tvg-id="tt0062588" tvg-name="tt0062588" tvg-type="tvshows" group-title="Mister Rogers' Neighborhood (1968)" ,Mister Rogers' Neighborhood (1968) S26 E14
+http://url
+#EXTINF:-1 tvg-id="tt0058796" tvg-name="tt0058796" tvg-type="tvshows" group-title="Days of our Lives (1965)" ,Days of our Lives (1965) S55 E07
+http://url
+#EXTINF:-1 tvg-id="coronavirus.us" tvg-name="coronavirus.us" tvg-type="live" group-title="US" tvg-logo="https://media.tv4.live/coronavirus.us.png",*Coronavirus Pandemic*
+http://url
+#EXTINF:-1 tvg-id="5.star.max.eastern.us" tvg-name="5.star.max.eastern.us" tvg-type="live" group-title="US" tvg-logo="https://media.tv4.live/5.star.max.eastern.us.png",5 Star Max (East)
+http://url
+#EXTINF:-1 tvg-id="tt10985510" tvg-name="tt10985510" tvg-type="movies" group-title="Movies 2020" ,Superman: Red Son (2020)
+http://url
+#EXTINF:-1 tvg-id="tt1634106" tvg-name="tt1634106" tvg-type="movies" group-title="Movies 2020" ,Bloodshot (2020)
+http://url
+#EXTINF:-1 tvg-id="tt9354842" tvg-name="tt9354842" tvg-type="movies" group-title="Movies 2020" ,To All the Boys: P.S. I Still Love You (2020)
+http://url
+#EXTINF:-1 tvg-id="tt8816194" tvg-name="tt8816194" tvg-type="movies" group-title="Movies 2019" ,Come to Daddy (2019)
+http://url
