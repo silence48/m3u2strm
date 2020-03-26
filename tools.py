@@ -58,10 +58,11 @@ def sxxExxMatch(line):
   tvshowmatch = re.compile('[0-9][0-9][x][0-9][0-9]', re.IGNORECASE).search(line)
   if tvshowmatch:
     return tvshowmatch
-  tvshowmatch = seasonmatch(line)
+  tvshowmatch = seasonMatch(line)
   if tvshowmatch:
     return tvshowmatch
   tvshowmatch = episodeMatch(line)
+  if tvshowmatch:
     return tvshowmatch
   return False
 
