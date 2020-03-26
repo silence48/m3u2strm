@@ -34,6 +34,7 @@ class Movie(object):
       filestring.append(self.resolution)
     return ('movies/' + ' - '.join(filestring) + ".strm")
 
+  
 class TVEpisode(object):
   '''A class used to construct the TV filename.
 
@@ -195,7 +196,14 @@ class rawStreamList(object):
     print(streaminfo, "LIVETV")
 
   def parseVodMovie(self, streaminfo, streamURL):
-    print(streaminfo, "MOVIE")
+    title = tools.parseMovieInfo(streaminfo)
+    resolution = tools.resolutionMatch(streaminfo)
+    if resolution:
+      resolution = tools.parseResolution(resolution)
+    else:
+      resolution = ""
+
+    print(title, "MOVIE")
 
 examplelist = rawStreamList('test.m3u')
 #examplelist.readM3u()

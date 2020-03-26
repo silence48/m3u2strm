@@ -1,4 +1,5 @@
 import re
+import os
 
 def verifyURL(line):
   verifyurl  = re.compile('://').search(line)
@@ -82,7 +83,7 @@ def yearMatch(line):
   return False
 
 def resolutionMatch(line):
-  resolutionmatch = re.compile('HD or SD').search(line)
+  resolutionmatch = re.compile('HD|SD').search(line)
   if resolutionmatch:
     return resolutionmatch
   return False
@@ -105,20 +106,42 @@ def imdbCheck(line):
     return imdbmatch
   return False
 
-def parseInfo(line):
+def parseMovieInfo(info):
   if ',' in info:
     info = info.split(',')
   if info[0] == "":
     del info[0]
-  info = info[0]
+  info = info[-1]
+  if '#' in info:
+    info = info.split('#')[0]
   if ':' in info:
     info = info.split(':')
-          
-def parseResolution(self, info):
-    resolutionmatch = getResult(resolutionMatch(info))
+    if resolutionMatch(info[0]):
+      info = info[1]
+    else:
+      info = ':'.join(info)
+  return info.strip()
+     
+def parseResolution(info):
+    resolutionmatch = resolutionMatch(info)
     if resolutionmatch:
+      resolutionmatch = getResult(resolutionmatch).strip()
       if resolutionmatch == 'HD':
         return '720p'
       else:
         return '480p'
     return
+
+def makeStrm(filename, url):
+  if not os.path.exists(filename):
+    streamfile = open(filename, "w+")
+    streamfile.write(md[4])
+    streamfile.close
+    print("strm file created:", filename)
+    streamfile.close()
+
+def makeDirectory(directory):
+  if not os.path.exists(directory):
+    os.mkdir(directory)
+  else:
+    print("directory found:", directory)
