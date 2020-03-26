@@ -69,62 +69,44 @@ def tvgChannelMatch(line):
     return tvgchannelid
   return False
 
+def yearMatch(line):
+  yearmatch = re.compile('[1-2][0-9][0-9][0-9]').search(info)
+  if yearmatch:
+    return yearmatch
+  return False
 
-      tvid = tvidmatch.group().split('\"')[1]
-        print(tvid, 'tvid')
-      
-      
-        logo = logomatch.group().split('\"')[1]
-        print(logo, 'logo')
-      
-      
-        group = groupmatch.group().split('\"')[1]
-        print(group, 'group')
-      
-      
-        info = infomatch.group().strip()
+def resolutionMatch(line):
+  resolutionmatch = re.compile('HD or SD').search(info)
+  if resolutionmatch:
+    return resolutionmatch
+  return False
 
-        resolutionmatch = re.compile('HD or SD').search(info)
-        if resolutionmatch:
-          if resolutionmatch.group() == 'HD':
-            resolution = '720p'
-          else:
-            resolution = '480p'
-          print(resolution, 'res')
+def episodeMatch(line):
+  episodematch = re.compile('[e][0-9][0-9]', re.IGNORECASE).search(info)
+  if episodematch:
+    return episodematch
+  return False
 
-        yearmatch = re.compile('[1-2][0-9][0-9][0-9]').search(info)
-        if yearmatch:
-          year = yearmatch.group()
-          print(year,'year')
-          datematch = re.compile('[1-2][0-9][0-9][0-9][ ][0-3][0-9][ ][0-1][0-9]').search(info)
-          if datematch:
-            date = datematch.group()
-            streamtype = 'vod'
-            print(date,'date')
+def seasonMatch(line):
+  seasonmatch = re.compile('[s][0-9][0-9]', re.IGNORECASE).search(info)
+  if seasonmatch:
+    return seasonmatch
+  return False
 
-        if streamtype == 'vod':
-          seasonmatch = re.compile('[s][0-9][0-9]', re.IGNORECASE).search(info)
-          if seasonmatch:
-            print(seasonmatch.group(), 'season')
+def parseInfo(line):
+  if ',' in info:
+    info = info.split(',')
+  if info[0] == "":
+    del info[0]
+  info = info[0]
+  if ':' in info:
+    info = info.split(':')
           
-          episodematch = re.compile('[e][0-9][0-9]', re.IGNORECASE).search(info)
-          if episodematch:
-            print(episodematch.group(), 'episode')
-        print(info,'firstinfo')
-        if ',' in info:
-          info = info.split(',')
-        if info[0] == "":
-          del info[0]
-        info = info[0]
-        if ':' in info:
-          info = info.split(':')
-
-        print(info,'lastinfo')
-  def parseResolution(self, info):
-    resolutionmatch = re.compile('HD|SD').search(info)
+def parseResolution(self, info):
+    resolutionmatch = getResult(resolutionMatch(info))
     if resolutionmatch:
-      if resolutionmatch.group() == 'HD':
-        resolution = '720p'
+      if resolutionmatch == 'HD':
+        return '720p'
       else:
-        resolution = '480p'
-      print(resolution, 'res')
+        return '480p'
+    return
