@@ -122,15 +122,13 @@ def parseMovieInfo(info):
       info = ':'.join(info)
   return info.strip()
      
-def parseResolution(info):
-    resolutionmatch = resolutionMatch(info)
-    if resolutionmatch:
-      resolutionmatch = getResult(resolutionmatch).strip()
-      if resolutionmatch == 'HD':
-        return '720p'
-      else:
-        return '480p'
-    return
+def parseResolution(match):
+  resolutionmatch = match.group().strip()
+  if resolutionmatch == 'HD':
+    return '720p'
+  else:
+    return '480p'
+  return
 
 def makeStrm(filename, url):
   if not os.path.exists(filename):

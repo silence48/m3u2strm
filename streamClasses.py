@@ -196,14 +196,20 @@ class rawStreamList(object):
     print(streaminfo, "LIVETV")
 
   def parseVodMovie(self, streaminfo, streamURL):
+    #todo: strip year from title, add language parsing for |LA| and strip it
     title = tools.parseMovieInfo(streaminfo)
     resolution = tools.resolutionMatch(streaminfo)
     if resolution:
       resolution = tools.parseResolution(resolution)
     else:
       resolution = ""
-
-    print(title, "MOVIE")
+    year = tools.yearMatch(streaminfo)
+    if year:
+      year = year.group().strip()
+    else:
+      year = ""
+    moviestream = Movie(title, streamURL, year=year, resolution=resolution)
+    print(moviestream.__dict__, "MOVIE")
 
 examplelist = rawStreamList('test.m3u')
 #examplelist.readM3u()
