@@ -52,11 +52,16 @@ def getResult(re_match):
   return re_match.group().split('\"')[1]
       
 def sxxExxMatch(line):
-  tvshowmatch = re.compile('[s][0-9][0-9]&[e][0-9][0-9]', re.IGNORECASE).search(line)
+  tvshowmatch = re.compile('[s][0-9][0-9][e][0-9][0-9]', re.IGNORECASE).search(line)
   if tvshowmatch:
     return tvshowmatch
   tvshowmatch = re.compile('[0-9][0-9][x][0-9][0-9]', re.IGNORECASE).search(line)
   if tvshowmatch:
+    return tvshowmatch
+  tvshowmatch = seasonmatch(line)
+  if tvshowmatch:
+    return tvshowmatch
+  tvshowmatch = episodeMatch(line)
     return tvshowmatch
   return False
 
@@ -98,7 +103,7 @@ def imdbCheck(line):
   if imdbmatch:
     return imdbmatch
   return False
-  
+
 def parseInfo(line):
   if ',' in info:
     info = info.split(',')
