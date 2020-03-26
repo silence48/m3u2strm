@@ -157,7 +157,7 @@ class rawStreamList(object):
         return 'live'
     
     tvshowmatch = tools.sxxExxMatch(streaminfo)
-    if tvshowmatch:
+    if tvshowmatch != False:
       return 'vodTV'
     
     airdatematch = tools.airDateMatch(streaminfo)
@@ -171,21 +171,31 @@ class rawStreamList(object):
     logomatch = tools.tvgLogoMatch(streaminfo)
     if logomatch:
       return 'live'
-
+    
+    tvgnamematch = tools.tvgNameMatch(streaminfo)
+    if tvgnamematch:
+      if not tools.imdbCheck(tools.getResult(tvgnamematch)):
+        return 'live'
     return 'vodMovie'
 
 
-  def parseStream(self, streaminfo, streamURL)
+  def parseStream(self, streaminfo, streamURL):
     streamtype = self.parseStreamType(streaminfo)
-    if streamtype = 'vodTV':
+    if streamtype == 'vodTV':
       self.parseVodTv(streaminfo, streamURL)
     elif streamtype == 'vodMovie':
       self.parseVodMovie(streaminfo, streamURL)
     else:
       self.parseLiveStream(streaminfo, streamURL)
   
-  def parseLiveStream(streaminfo, streamURL)
-    
+  def parseVodTv(self, streaminfo, streamURL):
+    print(streaminfo, "TVSHOW")
+  
+  def parseLiveStream(self, streaminfo, streamURL):
+    print(streaminfo, "LIVETV")
+
+  def parseVodMovie(self, streaminfo, streamURL):
+    print(streaminfo, "MOVIE")
 
 examplelist = rawStreamList('test.m3u')
 #examplelist.readM3u()
