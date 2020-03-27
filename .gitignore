@@ -10,3 +10,5 @@ m3u
 main.py
 *.m3u
 m3u-downloader.py
+*.7z
+*.zip

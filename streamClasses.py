@@ -28,12 +28,12 @@ class Movie(object):
     :returns: the fully constructed filename with type directory ea. "movies/The Longest Yard - 720p.strm"
     :rtype: str
     '''
-    filestring = [self.title]
+    filestring = [self.title.replace(':','-').replace('*','_').replace('/','_').replace('?','')]
     if self.year:
       filestring.append(("(" + self.year + ")"))
     if self.resolution:
       filestring.append(self.resolution)
-    return ('movies/' + self.title.replace(':','-') + "/" + ' - '.join(filestring) + ".strm")
+    return ('movies/' + self.title.replace(':','-').replace('*','_').replace('/','_').replace('?','') + "/" + ' - '.join(filestring) + ".strm")
   
   def makeStream(self):
     filename = self.getFilename()
@@ -85,7 +85,7 @@ class TVEpisode(object):
     :returns: the fully constructed filename with type directory ea. "tvshows/Star Trek the Next Generation - Season 02/Star Trek the Next Generation - S02E07 - The Borgs kill Picard - 1080p.strm"
     :rtype: str
     '''
-    filestring = [self.showtitle]
+    filestring = [self.showtitle.replace(':','-').replace('*','_').replace('/','_').replace('?','')]
     if self.airdate:
       filestring.append(self.airdate.strip())
     else:
@@ -97,9 +97,9 @@ class TVEpisode(object):
     if self.resolution:
       filestring.append(self.resolution.strip())
     if self.seasonnumber:
-      return ('tvshows/' + self.showtitle.strip().replace(':','-') + "/" + self.showtitle.strip().replace(':','-') + " - Season " + str(self.seasonnumber.strip()) + '/' + ' - '.join(filestring).replace(':','-') + ".strm")
+      return ('tvshows/' + self.showtitle.strip().replace(':','-').replace('/','_').replace('*','_').replace('?','') + "/" + self.showtitle.strip().replace(':','-').replace('/','-').replace('*','_').replace('?','') + " - Season " + str(self.seasonnumber.strip()) + '/' + ' - '.join(filestring).replace(':','-').replace('*','_') + ".strm")
     else:
-      return ('tvshows/' + self.showtitle.strip().replace(':','-') +"/" +' - '.join(filestring).replace(':','-') + ".strm")
+      return ('tvshows/' + self.showtitle.strip().replace(':','-').replace('/','_').replace('*','_').replace('?','') +"/" +' - '.join(filestring).replace(':','-').replace('*','_') + ".strm")
   
   def makeStream(self):
     filename = self.getFilename()
@@ -123,39 +123,41 @@ class rawStreamList(object):
     self.streams = {}
     self.filename = filename
     self.readLines()
-    self.parseLine(0)
+    self.parseLine()
 
   def readLines(self):
-    self.lines = [line.rstrip('\n') for line in open(self.filename)]
+    self.lines = [line.rstrip('\n') for line in open(self.filename, encoding="utf8")]
     return len(self.lines)
  
-  def parseLine(self, linenumber):
-    numlines = len(self.lines)
-    if linenumber >= numlines:
-      return 0
-    if not linenumber:
-      linenumber = 0
-    thisline = self.lines[linenumber]
-    nextline = self.lines[linenumber + 1]
-    firstline = re.compile('EXTM3U', re.IGNORECASE).search(thisline)
-    if firstline:
-      linenumber += 1
-      self.parseLine(linenumber)
-    if thisline[0] == "#" and nextline[0] == "#":
-      if tools.verifyURL(self.lines[linenumber+2]):
-        self.log.write_to_log(msg=' '.join(["raw stream found:", str(linenumber),'\n', ' '.join([thisline, nextline]),self.lines[linenumber+2]]))
-        self.parseStream(' '.join([thisline, nextline]),self.lines[linenumber+2])
-        linenumber += 3
-        self.parseLine(linenumber)
-      else:
-        self.log.write_to_log(msg=' '.join(['Error finding raw stream in linenumber:', str(linenumber),'\n', ' '.join(self.lines[linenumber:linenumber+2])]))
+  def parseLine(self):
+    linenumber=0
+    for j in range(len(self.lines)):
+      numlines = len(self.lines)
+      if linenumber >= numlines:
+        return 0
+      if not linenumber:
+        linenumber = 0
+      thisline = self.lines[linenumber]
+      nextline = self.lines[linenumber + 1]
+      firstline = re.compile('EXTM3U', re.IGNORECASE).search(thisline)
+      if firstline:
         linenumber += 1
-        self.parseLine(linenumber)
-    elif tools.verifyURL(nextline):
-      self.log.write_to_log(msg=' '.join(["raw stream found: ", str(linenumber),'\n', '\n'.join([thisline,nextline])]))
-      self.parseStream(thisline, nextline)
-      linenumber += 2
-      self.parseLine(linenumber)
+        continue
+      if thisline[0] == "#" and nextline[0] == "#":
+        if tools.verifyURL(self.lines[linenumber+2]):
+          self.log.write_to_log(msg=' '.join(["raw stream found:", str(linenumber),'\n', ' '.join([thisline, nextline]),self.lines[linenumber+2]]))
+          self.parseStream(' '.join([thisline, nextline]),self.lines[linenumber+2])
+          linenumber += 3
+          #self.parseLine(linenumber)
+        else:
+          self.log.write_to_log(msg=' '.join(['Error finding raw stream in linenumber:', str(linenumber),'\n', ' '.join(self.lines[linenumber:linenumber+2])]))
+          linenumber += 1
+          #self.parseLine(linenumber)
+      elif tools.verifyURL(nextline):
+        self.log.write_to_log(msg=' '.join(["raw stream found: ", str(linenumber),'\n', '\n'.join([thisline,nextline])]))
+        self.parseStream(thisline, nextline)
+        linenumber += 2
+        #self.parseLine(linenumber)
 
   def parseStreamType(self, streaminfo):
     typematch = tools.tvgTypeMatch(streaminfo)
