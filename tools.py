@@ -13,8 +13,14 @@ def tvgTypeMatch(line):
     return typematch
   return
   
+def ufcwweMatch(line):
+  ufcwwematch = re.compile('[U][f][c]|[w][w][e]|[r][i][d][i][c][u][l]', re.IGNORECASE).search(line)
+  if ufcwwematch:
+    return ufcwwematch
+  return
+
 def airDateMatch(line):
-  datematch = re.compile('[1-2][0-9][0-9][0-9][ ][0-3][0-9][ ][0-1][0-9]').search(line)
+  datematch = re.compile('[1-2][0-9][0-9][0-9][ ][0-3][0-9][ ][0-1][0-9]|[1-2][0-9][0-9][0-9][ ][0-1][0-9][ ][0-3][0-9]').search(line)
   if datematch:
     return datematch
   return
@@ -56,10 +62,10 @@ def sxxExxMatch(line):
   tvshowmatch = re.compile('[s][0-9][0-9][e][0-9][0-9]|[0-9][0-9][x][0-9][0-9][ ][-][ ]|[s][0-9][0-9][ ][e][0-9][0-9]|[0-9][0-9][x][0-9][0-9]', re.IGNORECASE).search(line)
   if tvshowmatch:
     return tvshowmatch
-  tvshowmatch = seasonMatch(line)
+  tvshowmatch = seasonMatch2(line)
   if tvshowmatch:
     return tvshowmatch
-  tvshowmatch = episodeMatch(line)
+  tvshowmatch = episodeMatch2(line)
   if tvshowmatch:
     return tvshowmatch
   return
@@ -74,7 +80,7 @@ def tvgChannelMatch(line):
   return
 
 def yearMatch(line):
-  yearmatch = re.compile('[(][1-2][0-9][0-9][0-9][)]|[1-2][0-9][0-9][0-9]').search(line)
+  yearmatch = re.compile('[(][1-2][0-9][0-9][0-9][)]').search(line)
   if yearmatch:
     return yearmatch
   return
@@ -97,10 +103,17 @@ def episodeMatch(line):
     return episodenumber
   return
 
+def episodeMatch2(line):
+  episodematch = re.compile('[e][0-9][0-9]|[0-9][0-9][x][0-9][0-9]', re.IGNORECASE).search(line)
+  if episodematch:
+    return episodematch
+  return
+
 def seasonMatch2(line):
   seasonmatch = re.compile('[s][0-9][0-9]', re.IGNORECASE).search(line)
   if seasonmatch:   
     return seasonmatch
+  return
 
 def seasonMatch(line):
   seasonmatch = re.compile('[s][0-9][0-9]|[0-9][0-9][x][0-9][0-9]', re.IGNORECASE).search(line)
@@ -199,7 +212,9 @@ def parseEpisode(title):
     return [showtitle,episodetitle,airdate.group()]
   seasonepisode = sxxExxMatch(title)
   if seasonepisode:
+    print(seasonepisode)
     if seasonepisode.end() - seasonepisode.start() > 6 or len(seasonepisode.group()) == 5:
+      
       episodetitle = title[seasonepisode.end():].strip()
       seasonnumber = seasonMatch(title)
       episodenumber = episodeMatch(title)

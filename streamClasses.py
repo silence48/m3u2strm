@@ -30,10 +30,16 @@ class Movie(object):
     '''
     filestring = [self.title.replace(':','-').replace('*','_').replace('/','_').replace('?','')]
     if self.year:
-      filestring.append(("(" + self.year + ")"))
+      if self.year[0] == "(":
+        filestring.append(self.year)
+      else:
+        self.year = "(" + self.year + ")"
+        filestring.append(self.year)
+    else:
+      self.year = "A"
     if self.resolution:
       filestring.append(self.resolution)
-    return ('movies/' + self.title.replace(':','-').replace('*','_').replace('/','_').replace('?','') + "/" + ' - '.join(filestring) + ".strm")
+    return ('movies/' + self.title.replace(':','-').replace('*','_').replace('/','_').replace('?','') + ' - ' + self.year + "/" + ' - '.join(filestring) + ".strm")
   
   def makeStream(self):
     filename = self.getFilename()
@@ -161,6 +167,9 @@ class rawStreamList(object):
 
   def parseStreamType(self, streaminfo):
     typematch = tools.tvgTypeMatch(streaminfo)
+    ufcwwematch = tools.ufcwweMatch(streaminfo)
+    if ufcwwematch:
+      return 'live'
     if typematch:
       streamtype = tools.getResult(typematch)
       if streamtype == 'tvshows':
@@ -185,7 +194,7 @@ class rawStreamList(object):
     logomatch = tools.tvgLogoMatch(streaminfo)
     if logomatch:
       return 'live'
-    
+
     tvgnamematch = tools.tvgNameMatch(streaminfo)
     if tvgnamematch:
       if not tools.imdbCheck(tools.getResult(tvgnamematch)):
