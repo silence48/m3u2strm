@@ -16,7 +16,7 @@ class Movie(object):
   :type resolution: str.
   '''
   def __init__(self, title, url, year=None, resolution=None, language=None):
-    self.title = title
+    self.title = title.strip()
     self.url = url
     self.year = year
     self.resolution = resolution
@@ -33,8 +33,19 @@ class Movie(object):
       filestring.append(("(" + self.year + ")"))
     if self.resolution:
       filestring.append(self.resolution)
-    return ('movies/' + ' - '.join(filestring) + ".strm")
-
+    return ('movies/' + self.title.replace(':','-') + "/" + ' - '.join(filestring) + ".strm")
+  
+  def makeStream(self):
+    filename = self.getFilename()
+    directories = filename.split('/')
+    directories = directories[:-1]
+    typedir = directories[0]
+    moviedir = '/'.join([typedir, directories[1]])
+    if not os.path.exists(typedir):
+      os.mkdir(typedir)
+    if not os.path.exists(moviedir):
+      os.mkdir(moviedir)
+    tools.makeStrm(filename, self.url)
   
 class TVEpisode(object):
   '''A class used to construct the TV filename.
@@ -240,7 +251,6 @@ class rawStreamList(object):
     print(moviestream.getFilename())
     moviestream.makeStream()
 
-examplelist = rawStreamList('test.m3u')
 
 
 
