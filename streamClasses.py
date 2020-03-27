@@ -97,9 +97,9 @@ class TVEpisode(object):
     if self.resolution:
       filestring.append(self.resolution.strip())
     if self.seasonnumber:
-      return ('tvshows/' + self.showtitle.strip() + "/" + self.showtitle.strip() + " - Season " + str(self.seasonnumber.strip()) + '/' + ' - '.join(filestring) + ".strm")
+      return ('tvshows/' + self.showtitle.strip().replace(':','-') + "/" + self.showtitle.strip().replace(':','-') + " - Season " + str(self.seasonnumber.strip()) + '/' + ' - '.join(filestring).replace(':','-') + ".strm")
     else:
-      return ('tvshows/' + self.showtitle.strip() +"/" +' - '.join(filestring) + ".strm")
+      return ('tvshows/' + self.showtitle.strip().replace(':','-') +"/" +' - '.join(filestring).replace(':','-') + ".strm")
   
   def makeStream(self):
     filename = self.getFilename()

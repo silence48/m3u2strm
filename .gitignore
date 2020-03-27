@@ -5,3 +5,8 @@ logs
 tvshows
 movies
 live
+prv
+m3u
+main.py
+*.m3u
+m3u-downloader.py
