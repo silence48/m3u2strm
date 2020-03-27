@@ -15,11 +15,12 @@ class Movie(object):
   :param resolution: The resolution of the stream (optional)
   :type resolution: str.
   '''
-  def __init__(self, title, url, year="", resolution=""):
+  def __init__(self, title, url, year=None, resolution=None, language=None):
     self.title = title
     self.url = url
     self.year = year
     self.resolution = resolution
+    self.language = language
 
   def getFilename(self):
     '''Getter to get the filename for the stream file
@@ -28,9 +29,9 @@ class Movie(object):
     :rtype: str
     '''
     filestring = [self.title]
-    if self.year != "":
+    if self.year:
       filestring.append(("(" + self.year + ")"))
-    if self.resolution != "":
+    if self.resolution:
       filestring.append(self.resolution)
     return ('movies/' + ' - '.join(filestring) + ".strm")
 
@@ -55,17 +56,17 @@ class TVEpisode(object):
   :param airdate: The date the show aired, for daily or nightly shows like news (optional)
   :type airdate: str
   '''
-  def __init__(self, showtitle, url, seasonnumber="", episodenumber="" ,resolution="", year="", episodename="", airdate=""):
+  def __init__(self, showtitle, url, seasonnumber=None, episodenumber=None ,resolution=None, language=None, episodename=None, airdate=None):
     self.showtitle = showtitle
     self.episodenumber = episodenumber
     self.seasonnumber = seasonnumber
     self.episodenumber = episodenumber
     self.url = url
     self.resolution = resolution
-    self.year = year
+    self.language = language
     self.episodename = episodename
     self.airdate = airdate
-    self.sXXeXX = "S" + self.seasonnumber + "E" + self.episodenumber
+    self.sXXeXX = "S" + str(self.seasonnumber) + "E" + str(self.episodenumber)
 
   def getFilename(self):
     '''Getter to get the filename for the stream file
@@ -74,38 +75,37 @@ class TVEpisode(object):
     :rtype: str
     '''
     filestring = [self.showtitle]
-    if self.year != "":
-      filestring.append(("(" + self.year + ")"))
-    if self.airdate != "":
-      filestring.append(self.airdate)
+    if self.airdate:
+      filestring.append(self.airdate.strip())
     else:
-      filestring.append(self.sXXeXX)
-    if self.episodename != "":
-      filestring.append(self.episodename)
-    if self.resolution != "":
-      filestring.append(self.resolution)
-    if self.seasonnumber != "":
-      return ('tvshows/'+ self.showtitle + " - Season " + self.seasonnumber + '/' + ' - '.join(filestring) + ".strm")
+      filestring.append(self.sXXeXX.strip())
+    if self.episodename:
+      filestring.append(self.episodename.strip())
+    if self.language:
+      filestring.append(self.language.strip())
+    if self.resolution:
+      filestring.append(self.resolution.strip())
+    if self.seasonnumber:
+      return ('tvshows/' + self.showtitle.strip() + "/" + self.showtitle.strip() + " - Season " + str(self.seasonnumber.strip()) + '/' + ' - '.join(filestring) + ".strm")
     else:
-      return ('tvshows/' + ' - '.join(filestring) + ".strm")
-'''
-#TestCases:
+      return ('tvshows/' + self.showtitle.strip() +"/" +' - '.join(filestring) + ".strm")
+  
+  def makeStream(self):
+    filename = self.getFilename()
+    directories = filename.split('/')
+    directories = directories[:-1]
+    typedir = directories[0]
+    showdir = '/'.join([typedir, directories[1]])
+    if not os.path.exists(typedir):
+      os.mkdir(typedir)
+    if not os.path.exists(showdir):
+      os.mkdir(showdir)
+    if len(directories) > 2:
+      seasondir = '/'.join([showdir, directories[2]])
+      if not os.path.exists(seasondir):
+        os.mkdir(seasondir)
+    tools.makeStrm(filename, self.url)
 
-testMovie = Movie('The Longest Yard', 'https://url.com/stream', resolution='720p')
-print(testMovie.getFilename())
-testTvepisode = TVEpisode('Late Night with David Letterman', 'https://url.com/tvstream', airdate='5-5-2020', resolution='480p', episodename='interviews with celebrities')
-print(testTvepisode.getFilename())
-testTvepisode = TVEpisode('Late Night with David Letterman', 'https://url.com/tvstream', airdate='5-5-2020', resolution='480p')
-print(testTvepisode.getFilename())
-testTvepisode = TVEpisode('Late Night with David Letterman', 'https://url.com/tvstream', airdate='5-5-2020')
-print(testTvepisode.getFilename())
-testTvepisode = TVEpisode('Star Trek', 'https://url.com/tvstream', seasonnumber='02', episodenumber='05', resolution='360p')
-print(testTvepisode.getFilename())
-testTvepisode = TVEpisode('Star Trek the Next Generation', 'https://url.com/tvstream', seasonnumber='06', episodenumber='15', episodename='Picard Kills the Borgs')
-print(testTvepisode.getFilename())
-testTvepisode = TVEpisode('Star Trek the Next Generation', 'https://url.com/tvstream', seasonnumber='02', episodenumber='07', resolution='1080p', episodename='The Borgs kill Picard')
-print(testTvepisode.getFilename())
-'''
 class rawStreamList(object):
   def __init__(self, filename):
     self.log = logger.Logger(__file__, log_level=logger.LogLevel.DEBUG)
@@ -158,7 +158,7 @@ class rawStreamList(object):
         return 'live'
     
     tvshowmatch = tools.sxxExxMatch(streaminfo)
-    if tvshowmatch != False:
+    if tvshowmatch:
       return 'vodTV'
     
     airdatematch = tools.airDateMatch(streaminfo)
@@ -190,31 +190,59 @@ class rawStreamList(object):
       self.parseLiveStream(streaminfo, streamURL)
   
   def parseVodTv(self, streaminfo, streamURL):
-    print(streaminfo, "TVSHOW")
+    #print(streaminfo)
+    title = tools.infoMatch(streaminfo)
+    if title:
+      title = tools.parseMovieInfo(title.group())
+    resolution = tools.resolutionMatch(streaminfo)
+    if resolution:
+      resolution = tools.parseResolution(resolution)
+      #print(resolution)
+      title = tools.stripResolution(title)
+    episodeinfo = tools.parseEpisode(title)
+    if episodeinfo:
+      if len(episodeinfo) == 3:
+        showtitle = episodeinfo[0]
+        airdate = episodeinfo[2]
+        episodename = episodeinfo[1]
+        episode = TVEpisode(showtitle, streamURL, resolution=resolution, episodename=episodename, airdate=airdate)
+      else:
+        showtitle = episodeinfo[0]
+        episodename = episodeinfo[1]
+        seasonnumber = episodeinfo[2]
+        episodenumber = episodeinfo[3]
+        language = episodeinfo[4]
+        episode = TVEpisode(showtitle, streamURL, seasonnumber=seasonnumber, episodenumber=episodenumber, resolution=resolution, language=language, episodename=episodename)
+    print(episode.__dict__, 'TVSHOW')
+    print(episode.getFilename())
+    episode.makeStream()
   
   def parseLiveStream(self, streaminfo, streamURL):
-    print(streaminfo, "LIVETV")
+    #print(streaminfo, "LIVETV")
+    pass
 
   def parseVodMovie(self, streaminfo, streamURL):
-    #todo: strip year from title, add language parsing for |LA| and strip it
+    #todo: add language parsing for |LA| and strip it
     title = tools.parseMovieInfo(streaminfo)
     resolution = tools.resolutionMatch(streaminfo)
     if resolution:
       resolution = tools.parseResolution(resolution)
-    else:
-      resolution = ""
     year = tools.yearMatch(streaminfo)
     if year:
+      title = tools.stripYear(title)
       year = year.group().strip()
-    else:
-      year = ""
-    moviestream = Movie(title, streamURL, year=year, resolution=resolution)
+    language = tools.languageMatch(title)
+    if language:
+      title = tools.stripLanguage(title)
+      language = language.group().strip()
+    moviestream = Movie(title, streamURL, year=year, resolution=resolution, language=language)
     print(moviestream.__dict__, "MOVIE")
+    print(moviestream.getFilename())
+    moviestream.makeStream()
 
 examplelist = rawStreamList('test.m3u')
-#examplelist.readM3u()
 
 
 
-     
+
 
