@@ -235,9 +235,9 @@ class rawStreamList(object):
         episodenumber = episodeinfo[3]
         language = episodeinfo[4]
         episode = TVEpisode(showtitle, streamURL, seasonnumber=seasonnumber, episodenumber=episodenumber, resolution=resolution, language=language, episodename=episodename)
-    print(episode.__dict__, 'TVSHOW')
-    print(episode.getFilename())
-    episode.makeStream()
+      print(episode.__dict__, 'TVSHOW')
+      print(episode.getFilename())
+      episode.makeStream()
   
   def parseLiveStream(self, streaminfo, streamURL):
     #print(streaminfo, "LIVETV")
